@@ -5,7 +5,7 @@ import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 import { ChevronRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Collection } from "@/lib/data";
-import { CollectionAppCard } from "./collection-app-card";
+import { SortableCollectionAppCard } from "./sortable-collection-app-card";
 
 interface DroppableCollectionContainerProps {
   collection: Collection;
@@ -28,7 +28,7 @@ export function DroppableCollectionContainer({ collection }: DroppableCollection
       <SortableContext items={collection.apps.map(app => app.id)} strategy={rectSortingStrategy}>
         <div ref={setNodeRef} className="grid grid-cols-4 gap-3 min-h-[80px]">
           {collection.apps.map(app => (
-            <CollectionAppCard key={app.id} app={app} />
+            <SortableCollectionAppCard key={app.id} app={app} />
           ))}
            {collection.apps.length === 0 && (
             <div className="col-span-4 flex items-center justify-center h-20 border-2 border-dashed rounded-lg">

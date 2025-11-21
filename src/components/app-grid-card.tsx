@@ -1,7 +1,5 @@
 "use client";
 
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import { Star, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -12,30 +10,21 @@ interface AppGridCardProps {
 }
 
 export function AppGridCard({ app }: AppGridCardProps) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: app.id, data: { app } });
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="cursor-grab touch-none">
-      <Card className="p-3 text-center flex flex-col items-center bg-white rounded-2xl shadow-sm">
-        <div className="w-16 h-16 rounded-xl bg-gray-100 flex items-center justify-center mb-2">
-          <app.icon className="w-8 h-8 text-gray-700" />
-        </div>
-        <h4 className="font-semibold text-sm truncate w-full">{app.name}</h4>
-        <div className="text-xs text-muted-foreground flex items-center gap-1 my-1">
-          <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-          <span>{app.rating}</span>
-          <span className="text-gray-400">{app.reviews}</span>
-        </div>
-        <Button size="sm" className="w-full mt-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg h-8 text-sm font-semibold">
-          <Zap className="w-4 h-4 mr-1" />
-          Open
-        </Button>
-      </Card>
-    </div>
+    <Card className="p-3 text-center flex flex-col items-center bg-white rounded-2xl shadow-sm">
+      <div className="w-16 h-16 rounded-xl bg-gray-100 flex items-center justify-center mb-2">
+        <app.icon className="w-8 h-8 text-gray-700" />
+      </div>
+      <h4 className="font-semibold text-sm truncate w-full">{app.name}</h4>
+      <div className="text-xs text-muted-foreground flex items-center justify-center gap-1 my-1">
+        <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+        <span>{app.rating}</span>
+        <span className="text-gray-400">{app.reviews}</span>
+      </div>
+      <Button size="sm" className="w-full mt-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg h-8 text-sm font-semibold">
+        <Zap className="w-4 h-4 mr-1" />
+        Open
+      </Button>
+    </Card>
   );
 }

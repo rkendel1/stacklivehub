@@ -3,13 +3,14 @@
 import * as React from "react";
 import { Search, User } from "lucide-react";
 import { NAV_ITEMS, MiniApp, Collection } from "@/lib/data";
-import { DroppableFeaturedContainer } from "./droppable-featured-container";
-import { DroppableAppGrid } from "./droppable-app-grid";
 import { cn } from "@/lib/utils";
-import { DroppableTrendingContainer } from "./droppable-trending-container";
-import { DroppableCollectionContainer } from "./droppable-collection-container";
 import { UserProfileView } from "./user-profile-view";
 import { type CarouselApi } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import { FeaturedAppCard } from "./featured-app-card";
+import { AppGridCard } from "./app-grid-card";
+import { TrendingAppCard } from "./trending-app-card";
+import { CollectionPreviewCard } from "./collection-preview-card";
 
 interface PhoneMockupProps {
   featuredApps: MiniApp[];
@@ -71,7 +72,23 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
           {activeView === 'home' && (
             <>
               <div>
-                <DroppableFeaturedContainer id="featured" apps={featuredApps} setApi={setApi} />
+                {featuredApps.length > 0 ? (
+                  <Carousel setApi={setApi} className="w-full -mx-4" opts={{ align: "start" }}>
+                    <CarouselContent className="pl-4">
+                      {featuredApps.map((app) => (
+                        <CarouselItem key={app.id} className="pl-4 basis-auto">
+                          <div className="w-[280px]">
+                            <FeaturedAppCard app={app} />
+                          </div>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                  </Carousel>
+                ) : (
+                  <div className="flex items-center justify-center h-44 border-2 border-dashed rounded-2xl">
+                    <p className="text-sm text-muted-foreground">Featured apps will appear here</p>
+                  </div>
+                )}
                 {featuredApps.length > 1 && (
                   <div className="flex justify-center items-center gap-1.5 mt-3">
                     {featuredApps.map((_, index) => (
@@ -95,7 +112,16 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
                   <h2 className="font-bold text-lg text-gray-800">New This Week</h2>
                   <a href="#" className="text-sm text-blue-500 font-semibold">See All &gt;</a>
                 </div>
-                <DroppableAppGrid id="newThisWeek" apps={newThisWeekApps} />
+                <div className="grid grid-cols-2 gap-4">
+                  {newThisWeekApps.map((app) => (
+                    <AppGridCard key={app.id} app={app} />
+                  ))}
+                </div>
+                {newThisWeekApps.length === 0 && (
+                  <div className="col-span-2 flex items-center justify-center h-24 border-2 border-dashed rounded-lg">
+                    <p className="text-sm text-muted-foreground">New apps will appear here</p>
+                  </div>
+                )}
               </div>
             </>
           )}
@@ -104,7 +130,16 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
                 <div className="flex justify-between items-center mb-2">
                     <h2 className="font-bold text-lg text-gray-800">Trending Now</h2>
                 </div>
-                <DroppableTrendingContainer id="trending" apps={trendingApps} />
+                <div className="space-y-3">
+                  {trendingApps.map((app, index) => (
+                    <TrendingAppCard key={app.id} app={app} rank={index + 1} />
+                  ))}
+                </div>
+                {trendingApps.length === 0 && (
+                  <div className="flex items-center justify-center h-24 border-2 border-dashed rounded-lg">
+                    <p className="text-sm text-muted-foreground">Trending apps will appear here</p>
+                  </div>
+                )}
             </div>
           )}
           {activeView === 'lists' && (
@@ -114,7 +149,7 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
                 </div>
                 <div className="space-y-4">
                     {collections.map(collection => (
-                        <DroppableCollectionContainer key={collection.id} collection={collection} />
+                        <CollectionPreviewCard key={collection.id} collection={collection} />
                     ))}
                 </div>
             </div>
