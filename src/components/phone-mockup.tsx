@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ChevronRight, Plus, Search, User } from "lucide-react";
+import { ChevronRight, Search, User } from "lucide-react";
 import { NAV_ITEMS, MiniApp, Collection } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { type CarouselApi } from "@/components/ui/carousel";
@@ -27,6 +27,9 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [selectedApp, setSelectedApp] = React.useState<MiniApp | null>(null);
+  const [isHeaderVisible, setIsHeaderVisible] = React.useState(true);
+  const lastScrollY = React.useRef(0);
+  const mainRef = React.useRef<HTMLElement>(null);
 
   React.useEffect(() => {
     if (!api) return;
@@ -43,7 +46,6 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
   };
 
   const handleSelectApp = (app: MiniApp) => {
-    // Only select apps with detailed info for now
     if (app.longDescription) {
       setSelectedApp(app);
     }
@@ -51,6 +53,21 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
 
   const handleGoBack = () => {
     setSelectedApp(null);
+  };
+
+  const handleScroll = () => {
+    if (mainRef.current) {
+      const currentScrollY = mainRef.current.scrollTop;
+      
+      if (currentScrollY <= 50) {
+        setIsHeaderVisible(true);
+      } else if (currentScrollY > lastScrollY.current) {
+        setIsHeaderVisible(false);
+      } else {
+        setIsHeaderVisible(true);
+      }
+      lastScrollY.current = currentScrollY;
+    }
   };
 
   return (
@@ -64,7 +81,10 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
           <AppDetailsView app={selectedApp} onBack={handleGoBack} />
         ) : (
           <>
-            <header className="p-4 pt-6 bg-gray-100/80 backdrop-blur-sm shrink-0 z-10">
+            <header className={cn(
+              "p-4 pt-6 bg-gray-100/80 backdrop-blur-sm z-10 absolute top-0 left-0 right-0 transition-transform duration-300 ease-in-out",
+              !isHeaderVisible && "-translate-y-full"
+            )}>
               <div className="flex justify-between items-center">
                 <h1 className="text-xl font-bold text-gray-800">MiniApps</h1>
                 <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
@@ -77,7 +97,11 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
               </div>
             </header>
 
-            <main className="flex-1 overflow-y-auto px-4 space-y-6 pt-4 pb-28">
+            <main 
+              ref={mainRef}
+              onScroll={handleScroll}
+              className="flex-1 overflow-y-auto px-4 space-y-6 pt-[116px] pb-28"
+            >
               {activeView === 'home' && (
                 <>
                   <div>
