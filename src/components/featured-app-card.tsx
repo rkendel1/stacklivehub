@@ -15,19 +15,19 @@ export function FeaturedAppCard({ app, onClick }: FeaturedAppCardProps) {
     <Component onClick={onClick} className="w-full text-left">
       <Card
         className={cn(
-          "p-5 rounded-3xl text-white relative overflow-hidden h-44 flex flex-col justify-between w-full",
+          "p-5 rounded-[2rem] text-white relative overflow-hidden h-44 flex flex-col justify-between w-full",
           app.backgroundColor
         )}
       >
         <div>
-          <div className="bg-white/30 text-white text-xs font-semibold px-2 py-1 rounded-md inline-block mb-3">
+          <div className="bg-white/20 text-white text-[10px] font-bold px-2.5 py-1 rounded-md inline-block mb-3">
             Featured
           </div>
-          <app.icon className="w-12 h-12" />
+          <app.icon className="w-16 h-16" />
         </div>
         <div>
-          <h3 className="font-bold text-lg">{app.name}</h3>
-          <p className="text-sm opacity-90">{app.description}</p>
+          <h3 className="font-bold text-2xl">{app.name}</h3>
+          <p className="text-base opacity-80">{app.description}</p>
         </div>
       </Card>
     </Component>

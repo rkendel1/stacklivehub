@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Plus, Search, User } from "lucide-react";
+import { ChevronRight, Plus, Search, User } from "lucide-react";
 import { NAV_ITEMS, MiniApp, Collection } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { type CarouselApi } from "@/components/ui/carousel";
@@ -104,7 +104,12 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
                           <button
                             key={index}
                             onClick={() => handleDotClick(index)}
-                            className={cn("rounded-full transition-all", index === current ? "w-2 h-2 bg-blue-500" : "w-1.5 h-1.5 bg-gray-300")}
+                            className={cn(
+                              "transition-all rounded-full",
+                              index === current
+                                ? "w-4 h-1.5 bg-blue-500"
+                                : "w-1.5 h-1.5 bg-gray-300"
+                            )}
                           />
                         ))}
                       </div>
@@ -113,8 +118,11 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
 
                   <div>
                     <div className="flex justify-between items-center mb-2">
-                      <h2 className="font-bold text-lg text-gray-800">New This Week</h2>
-                      <a href="#" className="text-sm text-blue-500 font-semibold">See All &gt;</a>
+                      <h2 className="font-bold text-xl text-gray-800">New This Week</h2>
+                      <a href="#" className="text-sm text-blue-500 font-semibold flex items-center">
+                        See All
+                        <ChevronRight className="w-4 h-4 ml-0.5" />
+                      </a>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       {newThisWeekApps.map((app) => (

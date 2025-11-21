@@ -8,6 +8,7 @@ export type MiniApp = {
   rating?: number;
   reviews?: string;
   backgroundColor?: string;
+  iconBackgroundColor?: string;
   category?: string;
   longDescription?: string;
   tags?: string[];
@@ -45,6 +46,7 @@ const ALL_APPS: MiniApp[] = [
     rating: 4.8, 
     reviews: '12K', 
     backgroundColor: 'bg-gradient-to-br from-orange-400 to-red-500',
+    iconBackgroundColor: 'bg-gradient-to-br from-orange-200 to-red-200',
     category: 'Creative',
     longDescription: 'Create stunning pixel art. Experience powerful features designed to enhance your productivity and creativity. Built with modern technology for smooth performance.',
     tags: ['#Creative', "Editor's Choice"],
@@ -70,9 +72,9 @@ const ALL_APPS: MiniApp[] = [
         ]
     }
   },
-  { id: 'app-12', name: 'Focus Timer', description: 'Stay focused and productive', icon: AlarmClock, rating: 4.9, reviews: '25K' },
-  { id: 'app-13', name: 'Music Mixer', description: 'Create and share music', icon: Music, rating: 4.7, reviews: '8K' },
-  { id: 'app-14', name: 'Recipe Book', description: 'Find and save recipes', icon: BookOpen, rating: 4.6, reviews: '15K' },
+  { id: 'app-12', name: 'Focus Timer', description: 'Boost your productivity', icon: AlarmClock, rating: 4.9, reviews: '25K', backgroundColor: 'bg-gradient-to-br from-blue-400 to-cyan-500', iconBackgroundColor: 'bg-gradient-to-br from-blue-200 to-cyan-200' },
+  { id: 'app-13', name: 'Music Mixer', description: 'Create and share music', icon: Music, rating: 4.7, reviews: '8K', iconBackgroundColor: 'bg-gradient-to-br from-pink-200 to-red-200' },
+  { id: 'app-14', name: 'Recipe Book', description: 'Find and save recipes', icon: BookOpen, rating: 4.6, reviews: '15K', iconBackgroundColor: 'bg-gradient-to-br from-green-200 to-yellow-200' },
   { id: 'app-15', name: 'Workout Buddy', description: 'Track your workouts', icon: Dumbbell, rating: 4.8, reviews: '20K' },
   { id: 'app-16', name: 'Budget Tracker', description: 'Manage your finances', icon: Wallet, rating: 4.7, reviews: '18K' },
   { id: 'app-17', name: 'Meditation', description: 'Find your inner peace', icon: BrainCircuit, rating: 4.9, reviews: '30K' },
@@ -86,8 +88,13 @@ const ALL_APPS: MiniApp[] = [
   { id: 'app-8', name: 'Browser', description: 'A mini web browser.', icon: Globe, rating: 4.4, reviews: '11K' },
 ];
 
-export const FEATURED_APPS_INITIAL: MiniApp[] = [ALL_APPS[0]];
-export const NEW_THIS_WEEK_APPS_INITIAL: MiniApp[] = [ALL_APPS[1], ALL_APPS[2], ALL_APPS[3]];
+export const FEATURED_APPS_INITIAL: MiniApp[] = [ALL_APPS.find(app => app.id === 'app-12')!];
+export const NEW_THIS_WEEK_APPS_INITIAL: MiniApp[] = [
+    ALL_APPS.find(app => app.id === 'app-11')!,
+    ALL_APPS.find(app => app.id === 'app-12')!,
+    ALL_APPS.find(app => app.id === 'app-13')!,
+    ALL_APPS.find(app => app.id === 'app-14')!,
+];
 export const TRENDING_APPS_INITIAL: MiniApp[] = [
     ALL_APPS.find(app => app.name === 'Pixel Art Studio')!,
     ALL_APPS.find(app => app.name === 'Focus Timer')!,
