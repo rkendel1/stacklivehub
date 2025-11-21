@@ -5,9 +5,10 @@ import { MyAppCard } from "./my-app-card";
 
 interface MyAppsViewProps {
     myApps: MiniApp[];
+    onAppClick?: (app: MiniApp) => void;
 }
 
-export function MyAppsView({ myApps }: MyAppsViewProps) {
+export function MyAppsView({ myApps, onAppClick }: MyAppsViewProps) {
     return (
         <div>
             <div className="flex justify-between items-center mb-4">
@@ -15,7 +16,7 @@ export function MyAppsView({ myApps }: MyAppsViewProps) {
             </div>
             <div className="grid grid-cols-2 gap-4">
                 {myApps.map((app) => (
-                    <MyAppCard key={app.id} app={app} />
+                    <MyAppCard key={app.id} app={app} onClick={onAppClick ? () => onAppClick(app) : undefined} />
                 ))}
             </div>
             {myApps.length === 0 && (

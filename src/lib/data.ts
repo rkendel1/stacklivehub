@@ -1,4 +1,4 @@
-import { Aperture, Box, Gamepad2, Globe, MicVocal, Puzzle, ShoppingCart, Video, Palette, AlarmClock, Music, BookOpen, Home, List, BarChart2, Star as StarIcon, Dumbbell, Wallet, Zap, Heart, BrainCircuit } from "lucide-react";
+import { Aperture, Box, Gamepad2, Globe, MicVocal, Puzzle, ShoppingCart, Video, Palette, AlarmClock, Music, BookOpen, Home, List, BarChart2, Star as StarIcon, Dumbbell, Wallet, Zap, Heart, BrainCircuit, Lock, Smartphone } from "lucide-react";
 
 export type MiniApp = {
   id: string;
@@ -8,6 +8,25 @@ export type MiniApp = {
   rating?: number;
   reviews?: string;
   backgroundColor?: string;
+  category?: string;
+  longDescription?: string;
+  tags?: string[];
+  screenshots?: string[];
+  features?: {
+    icon: React.ComponentType<any>;
+    title: string;
+    description: string;
+  }[];
+  ratingsAndReviews?: {
+    totalReviews: string;
+    averageRating: number;
+    reviews: {
+      avatar: string;
+      name: string;
+      rating: number;
+      comment: string;
+    }[];
+  };
 };
 
 export type Collection = {
@@ -18,7 +37,39 @@ export type Collection = {
 };
 
 const ALL_APPS: MiniApp[] = [
-  { id: 'app-11', name: 'Pixel Art Studio', description: 'Create stunning pixel art', icon: Palette, rating: 4.8, reviews: '12K', backgroundColor: 'bg-gradient-to-br from-orange-400 to-red-500' },
+  { 
+    id: 'app-11', 
+    name: 'Pixel Art Studio', 
+    description: 'Create stunning pixel art', 
+    icon: Palette, 
+    rating: 4.8, 
+    reviews: '12K', 
+    backgroundColor: 'bg-gradient-to-br from-orange-400 to-red-500',
+    category: 'Creative',
+    longDescription: 'Create stunning pixel art. Experience powerful features designed to enhance your productivity and creativity. Built with modern technology for smooth performance.',
+    tags: ['#Creative', "Editor's Choice"],
+    screenshots: [
+        '/screenshots/pixel-art-1.png',
+        '/screenshots/pixel-art-2.png',
+        '/screenshots/pixel-art-3.png',
+        '/screenshots/pixel-art-4.png',
+    ],
+    features: [
+        { icon: Zap, title: 'Lightning Fast', description: 'Optimized performance for smooth experience' },
+        { icon: Palette, title: 'Beautiful Design', description: 'Intuitive interface you\'ll love to use' },
+        { icon: Lock, title: 'Secure & Private', description: 'Your data stays safe and private' },
+        { icon: Smartphone, title: 'Mobile Optimized', description: 'Works perfectly on all devices' },
+    ],
+    ratingsAndReviews: {
+        averageRating: 4.8,
+        totalReviews: '12K ratings',
+        reviews: [
+            { avatar: 'https://i.pravatar.cc/40?u=sarah', name: 'Sarah M.', rating: 5, comment: 'Amazing app! Does exactly what I need.' },
+            { avatar: 'https://i.pravatar.cc/40?u=mike', name: 'Mike R.', rating: 5, comment: 'Great functionality, very intuitive.' },
+            { avatar: 'https://i.pravatar.cc/40?u=emma', name: 'Emma L.', rating: 4, comment: 'Love the design and features.' },
+        ]
+    }
+  },
   { id: 'app-12', name: 'Focus Timer', description: 'Stay focused and productive', icon: AlarmClock, rating: 4.9, reviews: '25K' },
   { id: 'app-13', name: 'Music Mixer', description: 'Create and share music', icon: Music, rating: 4.7, reviews: '8K' },
   { id: 'app-14', name: 'Recipe Book', description: 'Find and save recipes', icon: BookOpen, rating: 4.6, reviews: '15K' },
