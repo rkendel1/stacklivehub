@@ -12,6 +12,7 @@ import { TrendingAppCard } from "./trending-app-card";
 import { CollectionPreviewCard } from "./collection-preview-card";
 import { MyAppsView } from "./my-apps-view";
 import { AppDetailsView } from "./app-details-view";
+import { ProfileView } from "./profile-view";
 
 interface PhoneMockupProps {
   featuredApps: MiniApp[];
@@ -28,6 +29,7 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
   const [current, setCurrent] = React.useState(0);
   const [selectedApp, setSelectedApp] = React.useState<MiniApp | null>(null);
   const [isHeaderVisible, setIsHeaderVisible] = React.useState(true);
+  const [isProfileVisible, setIsProfileVisible] = React.useState(false);
   const lastScrollY = React.useRef(0);
   const mainRef = React.useRef<HTMLElement>(null);
 
@@ -79,6 +81,12 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
       <div className="rounded-[2rem] overflow-hidden w-full h-full bg-gray-100 dark:bg-background flex flex-col relative">
         {selectedApp ? (
           <AppDetailsView app={selectedApp} onBack={handleGoBack} />
+        ) : isProfileVisible ? (
+          <ProfileView 
+            myApps={myApps} 
+            onBack={() => setIsProfileVisible(false)} 
+            onAppClick={handleSelectApp} 
+          />
         ) : (
           <>
             <header className={cn(
@@ -87,9 +95,9 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
             )}>
               <div className="flex justify-between items-center">
                 <h1 className="text-xl font-bold text-gray-800">MiniApps</h1>
-                <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
+                <button onClick={() => setIsProfileVisible(true)} className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
                   <User className="w-5 h-5 text-white" />
-                </div>
+                </button>
               </div>
               <div className="relative mt-4">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
