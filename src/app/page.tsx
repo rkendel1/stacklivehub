@@ -14,25 +14,28 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { AVAILABLE_APPS_INITIAL, FEATURED_APPS_INITIAL, NEW_THIS_WEEK_APPS_INITIAL, TRENDING_APPS_INITIAL, MiniApp } from "@/lib/data";
+import { AVAILABLE_APPS_INITIAL, FEATURED_APPS_INITIAL, NEW_THIS_WEEK_APPS_INITIAL, TRENDING_APPS_INITIAL, COLLECTIONS_INITIAL, MiniApp, Collection } from "@/lib/data";
 import { PhoneMockup } from "@/components/phone-mockup";
 import { DroppableAppContainer } from "@/components/droppable-app-container";
 import { MiniAppCard } from "@/components/mini-app-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { produce } from "immer";
 
-type AppContainers = {
+type AppState = {
   available: MiniApp[];
   featured: MiniApp[];
   newThisWeek: MiniApp[];
   trending: MiniApp[];
+  collections: Collection[];
 };
 
 export default function CurationDashboard() {
-  const [apps, setApps] = React.useState<AppContainers>({
+  const [appState, setAppState] = React.useState<AppState>({
     available: AVAILABLE_APPS_INITIAL,
     featured: FEATURED_APPS_INITIAL,
     newThisWeek: NEW_THIS_WEEK_APPS_INITIAL,
     trending: TRENDING_APPS_INITIAL,
+    collections: COLLECTIONS_INITIAL,
   });
   const [activeApp, setActiveApp] = React.useState<MiniApp | null>(null);
   const [activeView, setActiveView] = React.useState('home');
@@ -44,22 +47,22 @@ export default function CurationDashboard() {
     })
   );
 
-  const findContainer = (id: string): keyof AppContainers | null => {
-    if (id in apps) {
-      return id as keyof AppContainers;
+  const findContainerInfo = (id: string | number) => {
+    for (const key of ['available', 'featured', 'newThisWeek', 'trending']) {
+      if (key === id || appState[key as keyof AppState].some((app: MiniApp) => app.id === id)) {
+        return { type: 'list', listId: key };
+      }
     }
-    for (const key in apps) {
-        const containerKey = key as keyof AppContainers;
-        if (apps[containerKey].some(app => app.id === id)) {
-            return containerKey;
-        }
+    for (const collection of appState.collections) {
+      if (collection.id === id || collection.apps.some(app => app.id === id)) {
+        return { type: 'collection', collectionId: collection.id };
+      }
     }
     return null;
   };
 
   const handleDragStart = (event: DragStartEvent) => {
-    const { active } = event;
-    const app = active.data.current?.app as MiniApp;
+    const app = event.active.data.current?.app as MiniApp;
     setActiveApp(app);
   };
 
@@ -67,41 +70,47 @@ export default function CurationDashboard() {
     const { active, over } = event;
     if (!over) return;
 
-    const activeId = active.id.toString();
-    const overId = over.id.toString();
+    const activeId = active.id;
+    const overId = over.id;
 
-    const activeContainer = findContainer(activeId);
-    const overContainer = findContainer(overId);
+    const activeContainerInfo = findContainerInfo(activeId);
+    const overContainerInfo = findContainerInfo(overId);
 
-    if (!activeContainer || !overContainer || activeContainer === overContainer) {
+    if (!activeContainerInfo || !overContainerInfo || JSON.stringify(activeContainerInfo) === JSON.stringify(overContainerInfo)) {
       return;
     }
 
-    setApps((prev) => {
-      const newApps = { ...prev };
-      const activeItems = newApps[activeContainer];
-      const overItems = newApps[overContainer];
-      
-      const activeIndex = activeItems.findIndex((item) => item.id === activeId);
-      const [movedItem] = activeItems.splice(activeIndex, 1);
-
-      if (overContainer === 'featured') {
-        if (overItems.length > 0) {
-          const [swappedItem] = overItems.splice(0, 1, movedItem);
-          const isAlreadyAvailable = newApps.available.some(app => app.id === swappedItem.id);
-          if (!isAlreadyAvailable) {
-            newApps.available.unshift(swappedItem);
-          }
+    setAppState(
+      produce(draft => {
+        let activeItems: MiniApp[] | undefined;
+        if (activeContainerInfo.type === 'list') {
+          activeItems = draft[activeContainerInfo.listId as keyof AppState] as MiniApp[];
         } else {
-          overItems.push(movedItem);
+          activeItems = draft.collections.find(c => c.id === activeContainerInfo.collectionId)?.apps;
         }
-      } else {
-        const overIndex = overId in prev ? overItems.length : overItems.findIndex((item) => item.id === overId);
+        if (!activeItems) return;
+
+        const activeIndex = activeItems.findIndex(item => item.id === activeId);
+        if (activeIndex === -1) return;
+        
+        const [movedItem] = activeItems.splice(activeIndex, 1);
+
+        let overItems: MiniApp[] | undefined;
+        if (overContainerInfo.type === 'list') {
+          overItems = draft[overContainerInfo.listId as keyof AppState] as MiniApp[];
+        } else {
+          overItems = draft.collections.find(c => c.id === overContainerInfo.collectionId)?.apps;
+        }
+        if (!overItems) return;
+
+        let overIndex = overItems.findIndex(item => item.id === overId);
+        if (overIndex === -1) {
+          overIndex = overItems.length;
+        }
+        
         overItems.splice(overIndex, 0, movedItem);
-      }
-      
-      return newApps;
-    });
+      })
+    );
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -109,22 +118,37 @@ export default function CurationDashboard() {
     setActiveApp(null);
     if (!over) return;
 
-    const activeContainer = findContainer(active.id.toString());
-    const overContainer = findContainer(over.id.toString());
+    const activeContainerInfo = findContainerInfo(active.id);
+    const overContainerInfo = findContainerInfo(over.id);
 
-    if (!activeContainer || !overContainer || activeContainer !== overContainer) {
-        return;
+    if (!activeContainerInfo || !overContainerInfo || JSON.stringify(activeContainerInfo) !== JSON.stringify(overContainerInfo)) {
+      return;
     }
 
-    const activeIndex = apps[activeContainer].findIndex(app => app.id === active.id);
-    const overIndex = apps[overContainer].findIndex(app => app.id === over.id);
+    setAppState(
+      produce(draft => {
+        let items: MiniApp[] | undefined;
+        if (activeContainerInfo.type === 'list') {
+          items = draft[activeContainerInfo.listId as keyof AppState] as MiniApp[];
+        } else {
+          items = draft.collections.find(c => c.id === activeContainerInfo.collectionId)?.apps;
+        }
+        if (!items) return;
 
-    if (activeIndex !== overIndex) {
-        setApps(prev => ({
-            ...prev,
-            [overContainer]: arrayMove(prev[overContainer], activeIndex, overIndex)
-        }));
-    }
+        const activeIndex = items.findIndex(app => app.id === active.id);
+        const overIndex = items.findIndex(app => app.id === over.id);
+
+        if (activeIndex !== -1 && overIndex !== -1 && activeIndex !== overIndex) {
+          const moved = arrayMove(items, activeIndex, overIndex);
+          if (activeContainerInfo.type === 'list') {
+            draft[activeContainerInfo.listId as keyof AppState] = moved;
+          } else {
+            const collection = draft.collections.find(c => c.id === activeContainerInfo.collectionId);
+            if (collection) collection.apps = moved;
+          }
+        }
+      })
+    );
   };
 
   return (
@@ -147,15 +171,16 @@ export default function CurationDashboard() {
                         <CardTitle>Available Apps</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <DroppableAppContainer id="available" apps={apps.available} />
+                        <DroppableAppContainer id="available" apps={appState.available} />
                     </CardContent>
                 </Card>
 
                 <div className="lg:col-span-2 flex items-center justify-center">
                     <PhoneMockup 
-                        featuredApps={apps.featured} 
-                        newThisWeekApps={apps.newThisWeek}
-                        trendingApps={apps.trending}
+                        featuredApps={appState.featured} 
+                        newThisWeekApps={appState.newThisWeek}
+                        trendingApps={appState.trending}
+                        collections={appState.collections}
                         activeView={activeView}
                         setActiveView={setActiveView}
                     />

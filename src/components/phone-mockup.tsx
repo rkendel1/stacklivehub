@@ -1,21 +1,23 @@
 "use client";
 
 import { Search, User } from "lucide-react";
-import { NAV_ITEMS, MiniApp } from "@/lib/data";
+import { NAV_ITEMS, MiniApp, Collection } from "@/lib/data";
 import { DroppableFeaturedContainer } from "./droppable-featured-container";
 import { DroppableAppGrid } from "./droppable-app-grid";
 import { cn } from "@/lib/utils";
 import { DroppableTrendingContainer } from "./droppable-trending-container";
+import { DroppableCollectionContainer } from "./droppable-collection-container";
 
 interface PhoneMockupProps {
   featuredApps: MiniApp[];
   newThisWeekApps: MiniApp[];
   trendingApps: MiniApp[];
+  collections: Collection[];
   activeView: string;
   setActiveView: (viewId: string) => void;
 }
 
-export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, activeView, setActiveView }: PhoneMockupProps) {
+export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, collections, activeView, setActiveView }: PhoneMockupProps) {
   return (
     <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[700px] w-[340px] shadow-xl">
       <div className="w-[148px] h-[18px] bg-gray-800 top-0 rounded-b-[1rem] left-1/2 -translate-x-1/2 absolute"></div>
@@ -63,6 +65,18 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, activ
                     <h2 className="font-bold text-lg text-gray-800">Trending Now</h2>
                 </div>
                 <DroppableTrendingContainer id="trending" apps={trendingApps} />
+            </div>
+          )}
+          {activeView === 'lists' && (
+            <div>
+                <div className="flex justify-between items-center mb-2">
+                    <h2 className="font-bold text-lg text-gray-800">Curated Collections</h2>
+                </div>
+                <div className="space-y-4">
+                    {collections.map(collection => (
+                        <DroppableCollectionContainer key={collection.id} collection={collection} />
+                    ))}
+                </div>
             </div>
           )}
         </main>
