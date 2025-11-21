@@ -8,17 +8,20 @@ import { useDroppable } from "@dnd-kit/core";
 import { MiniApp } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { SortableFeaturedAppCard } from "./sortable-featured-app-card";
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 
 interface DroppableFeaturedContainerProps {
   id: string;
   apps: MiniApp[];
   className?: string;
+  setApi?: (api: CarouselApi) => void;
 }
 
 export function DroppableFeaturedContainer({
   id,
   apps,
   className,
+  setApi,
 }: DroppableFeaturedContainerProps) {
   const { setNodeRef } = useDroppable({ id });
 
@@ -29,11 +32,17 @@ export function DroppableFeaturedContainer({
         strategy={horizontalListSortingStrategy}
       >
         {apps.length > 0 ? (
-          <div className="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
-            {apps.map((app) => (
-              <SortableFeaturedAppCard key={app.id} app={app} />
-            ))}
-          </div>
+          <Carousel setApi={setApi} className="w-full -mx-4" opts={{
+            align: "start",
+          }}>
+            <CarouselContent className="pl-4">
+              {apps.map((app) => (
+                <CarouselItem key={app.id} className="pl-4 basis-auto">
+                  <SortableFeaturedAppCard app={app} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
         ) : (
           <div className="flex items-center justify-center h-44 border-2 border-dashed rounded-2xl">
             <p className="text-sm text-muted-foreground">

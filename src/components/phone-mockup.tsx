@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { DroppableTrendingContainer } from "./droppable-trending-container";
 import { DroppableCollectionContainer } from "./droppable-collection-container";
 import { UserProfileView } from "./user-profile-view";
+import { type CarouselApi } from "@/components/ui/carousel";
 
 interface PhoneMockupProps {
   featuredApps: MiniApp[];
@@ -21,6 +22,31 @@ interface PhoneMockupProps {
 }
 
 export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, collections, myApps, activeView, setActiveView }: PhoneMockupProps) {
+  const [api, setApi] = React.useState<CarouselApi>();
+  const [current, setCurrent] = React.useState(0);
+
+  React.useEffect(() => {
+    if (!api) {
+      return;
+    }
+
+    setCurrent(api.selectedScrollSnap());
+
+    const onSelect = () => {
+      setCurrent(api.selectedScrollSnap());
+    };
+
+    api.on("select", onSelect);
+
+    return () => {
+      api.off("select", onSelect);
+    };
+  }, [api]);
+
+  const handleDotClick = (index: number) => {
+    api?.scrollTo(index);
+  };
+
   return (
     <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[700px] w-[340px] shadow-xl">
       <div className="w-[148px] h-[18px] bg-gray-800 top-0 rounded-b-[1rem] left-1/2 -translate-x-1/2 absolute"></div>
@@ -45,17 +71,16 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
           {activeView === 'home' && (
             <>
               <div>
-                <DroppableFeaturedContainer id="featured" apps={featuredApps} />
+                <DroppableFeaturedContainer id="featured" apps={featuredApps} setApi={setApi} />
                 {featuredApps.length > 1 && (
                   <div className="flex justify-center items-center gap-1.5 mt-3">
                     {featuredApps.map((_, index) => (
-                      <div
+                      <button
                         key={index}
+                        onClick={() => handleDotClick(index)}
                         className={cn(
                           "rounded-full transition-all",
-                          // For now, we'll just highlight the first dot.
-                          // A more complex implementation would track scroll position.
-                          index === 0
+                          index === current
                             ? "w-2 h-2 bg-blue-500"
                             : "w-1.5 h-1.5 bg-gray-300"
                         )}

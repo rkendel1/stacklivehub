@@ -185,7 +185,7 @@ export default function CurationDashboard() {
                   </div>
                 </CardContent>
               </Card>
-              <div className="lg:col-span-2 flex items-center justify-center">
+              <div className="lg:col-span-2 flex items-center justify-end">
                 <Skeleton className="h-[700px] w-[340px] rounded-[2.5rem]" />
               </div>
             </>
@@ -206,7 +206,7 @@ export default function CurationDashboard() {
                 </CardContent>
               </Card>
 
-              <div className="lg:col-span-2 flex items-center justify-center">
+              <div className="lg:col-span-2 flex items-center justify-end">
                 <PhoneMockup
                   featuredApps={appState.featured}
                   newThisWeekApps={appState.newThisWeek}
