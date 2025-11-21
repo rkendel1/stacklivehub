@@ -14,7 +14,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { AVAILABLE_APPS_INITIAL, FEATURED_APPS_INITIAL, NEW_THIS_WEEK_APPS_INITIAL, TRENDING_APPS_INITIAL, COLLECTIONS_INITIAL, MiniApp, Collection } from "@/lib/data";
+import { AVAILABLE_APPS_INITIAL, FEATURED_APPS_INITIAL, NEW_THIS_WEEK_APPS_INITIAL, TRENDING_APPS_INITIAL, COLLECTIONS_INITIAL, MY_APPS_INITIAL, MiniApp, Collection } from "@/lib/data";
 import { PhoneMockup } from "@/components/phone-mockup";
 import { DroppableAppContainer } from "@/components/droppable-app-container";
 import { MiniAppCard } from "@/components/mini-app-card";
@@ -27,7 +27,10 @@ type AppState = {
   newThisWeek: MiniApp[];
   trending: MiniApp[];
   collections: Collection[];
+  myApps: MiniApp[];
 };
+
+type MiniAppListKeys = Exclude<keyof AppState, 'collections'>;
 
 export default function CurationDashboard() {
   const [appState, setAppState] = React.useState<AppState>({
@@ -36,6 +39,7 @@ export default function CurationDashboard() {
     newThisWeek: NEW_THIS_WEEK_APPS_INITIAL,
     trending: TRENDING_APPS_INITIAL,
     collections: COLLECTIONS_INITIAL,
+    myApps: MY_APPS_INITIAL,
   });
   const [activeApp, setActiveApp] = React.useState<MiniApp | null>(null);
   const [activeView, setActiveView] = React.useState('home');
@@ -48,14 +52,15 @@ export default function CurationDashboard() {
   );
 
   const findContainerInfo = (id: string | number) => {
-    for (const key of ['available', 'featured', 'newThisWeek', 'trending']) {
-      if (key === id || appState[key as keyof AppState].some((app: MiniApp) => app.id === id)) {
-        return { type: 'list', listId: key };
+    const listKeys: MiniAppListKeys[] = ['available', 'featured', 'newThisWeek', 'trending', 'myApps'];
+    for (const key of listKeys) {
+      if (key === id || appState[key].some((app) => app.id === id)) {
+        return { type: 'list' as const, listId: key };
       }
     }
     for (const collection of appState.collections) {
       if (collection.id === id || collection.apps.some(app => app.id === id)) {
-        return { type: 'collection', collectionId: collection.id };
+        return { type: 'collection' as const, collectionId: collection.id };
       }
     }
     return null;
@@ -84,7 +89,7 @@ export default function CurationDashboard() {
       produce(draft => {
         let activeItems: MiniApp[] | undefined;
         if (activeContainerInfo.type === 'list') {
-          activeItems = draft[activeContainerInfo.listId as keyof AppState] as MiniApp[];
+          activeItems = draft[activeContainerInfo.listId] as MiniApp[];
         } else {
           activeItems = draft.collections.find(c => c.id === activeContainerInfo.collectionId)?.apps;
         }
@@ -97,7 +102,7 @@ export default function CurationDashboard() {
 
         let overItems: MiniApp[] | undefined;
         if (overContainerInfo.type === 'list') {
-          overItems = draft[overContainerInfo.listId as keyof AppState] as MiniApp[];
+          overItems = draft[overContainerInfo.listId] as MiniApp[];
         } else {
           overItems = draft.collections.find(c => c.id === overContainerInfo.collectionId)?.apps;
         }
@@ -129,7 +134,7 @@ export default function CurationDashboard() {
       produce(draft => {
         let items: MiniApp[] | undefined;
         if (activeContainerInfo.type === 'list') {
-          items = draft[activeContainerInfo.listId as keyof AppState] as MiniApp[];
+          items = draft[activeContainerInfo.listId] as MiniApp[];
         } else {
           items = draft.collections.find(c => c.id === activeContainerInfo.collectionId)?.apps;
         }
@@ -141,7 +146,7 @@ export default function CurationDashboard() {
         if (activeIndex !== -1 && overIndex !== -1 && activeIndex !== overIndex) {
           const moved = arrayMove(items, activeIndex, overIndex);
           if (activeContainerInfo.type === 'list') {
-            draft[activeContainerInfo.listId as keyof AppState] = moved;
+            draft[activeContainerInfo.listId] = moved;
           } else {
             const collection = draft.collections.find(c => c.id === activeContainerInfo.collectionId);
             if (collection) collection.apps = moved;
@@ -181,6 +186,7 @@ export default function CurationDashboard() {
                         newThisWeekApps={appState.newThisWeek}
                         trendingApps={appState.trending}
                         collections={appState.collections}
+                        myApps={appState.myApps}
                         activeView={activeView}
                         setActiveView={setActiveView}
                     />

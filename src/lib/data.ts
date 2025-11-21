@@ -1,4 +1,4 @@
-import { Aperture, Box, Gamepad2, Globe, MicVocal, Puzzle, ShoppingCart, Video, Palette, AlarmClock, Music, BookOpen, Home, List, BarChart2, Star as StarIcon, Dumbbell, Wallet, Zap, Heart } from "lucide-react";
+import { Aperture, Box, Gamepad2, Globe, MicVocal, Puzzle, ShoppingCart, Video, Palette, AlarmClock, Music, BookOpen, Home, List, BarChart2, Star as StarIcon, Dumbbell, Wallet, Zap, Heart, BrainCircuit } from "lucide-react";
 
 export type MiniApp = {
   id: string;
@@ -24,6 +24,7 @@ const ALL_APPS: MiniApp[] = [
   { id: 'app-14', name: 'Recipe Book', description: 'Find and save recipes', icon: BookOpen, rating: 4.6, reviews: '15K' },
   { id: 'app-15', name: 'Workout Buddy', description: 'Track your workouts', icon: Dumbbell, rating: 4.8, reviews: '20K' },
   { id: 'app-16', name: 'Budget Tracker', description: 'Manage your finances', icon: Wallet, rating: 4.7, reviews: '18K' },
+  { id: 'app-17', name: 'Meditation', description: 'Find your inner peace', icon: BrainCircuit, rating: 4.9, reviews: '30K' },
   { id: 'app-1', name: 'E-commerce Cart', description: 'A simple shopping cart experience.', icon: ShoppingCart, rating: 4.5, reviews: '10K' },
   { id: 'app-2', name: 'Game Pad', description: 'Interactive game controller.', icon: Gamepad2, rating: 4.2, reviews: '5K' },
   { id: 'app-3', name: 'Video Player', description: 'A custom video player.', icon: Video, rating: 4.6, reviews: '20K' },
@@ -76,11 +77,18 @@ export const COLLECTIONS_INITIAL: Collection[] = [
     }
 ];
 
+export const MY_APPS_INITIAL: MiniApp[] = [
+    ALL_APPS.find(app => app.name === 'Pixel Art Studio')!,
+    ALL_APPS.find(app => app.name === 'Focus Timer')!,
+    ALL_APPS.find(app => app.name === 'Meditation')!,
+];
+
 const curatedIds = new Set([
     ...FEATURED_APPS_INITIAL.map(app => app.id),
     ...NEW_THIS_WEEK_APPS_INITIAL.map(app => app.id),
     ...TRENDING_APPS_INITIAL.map(app => app.id),
-    ...COLLECTIONS_INITIAL.flatMap(c => c.apps.map(a => a.id))
+    ...COLLECTIONS_INITIAL.flatMap(c => c.apps.map(a => a.id)),
+    ...MY_APPS_INITIAL.map(app => app.id)
 ]);
 
 export const AVAILABLE_APPS_INITIAL: MiniApp[] = ALL_APPS.filter(app => !curatedIds.has(app.id));

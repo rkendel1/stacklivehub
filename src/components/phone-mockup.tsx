@@ -7,17 +7,19 @@ import { DroppableAppGrid } from "./droppable-app-grid";
 import { cn } from "@/lib/utils";
 import { DroppableTrendingContainer } from "./droppable-trending-container";
 import { DroppableCollectionContainer } from "./droppable-collection-container";
+import { DroppableMyAppsContainer } from "./droppable-my-apps-container";
 
 interface PhoneMockupProps {
   featuredApps: MiniApp[];
   newThisWeekApps: MiniApp[];
   trendingApps: MiniApp[];
   collections: Collection[];
+  myApps: MiniApp[];
   activeView: string;
   setActiveView: (viewId: string) => void;
 }
 
-export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, collections, activeView, setActiveView }: PhoneMockupProps) {
+export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, collections, myApps, activeView, setActiveView }: PhoneMockupProps) {
   return (
     <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[700px] w-[340px] shadow-xl">
       <div className="w-[148px] h-[18px] bg-gray-800 top-0 rounded-b-[1rem] left-1/2 -translate-x-1/2 absolute"></div>
@@ -77,6 +79,14 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
                         <DroppableCollectionContainer key={collection.id} collection={collection} />
                     ))}
                 </div>
+            </div>
+          )}
+          {activeView === 'my-apps' && (
+            <div>
+                <div className="flex justify-between items-center mb-2">
+                    <h2 className="font-bold text-lg text-gray-800">My Apps</h2>
+                </div>
+                <DroppableMyAppsContainer id="myApps" apps={myApps} />
             </div>
           )}
         </main>
