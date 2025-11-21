@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { Search, User } from "lucide-react";
 import { NAV_ITEMS, MiniApp, Collection } from "@/lib/data";
 import { DroppableFeaturedContainer } from "./droppable-featured-container";
@@ -45,11 +46,23 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
             <>
               <div>
                 <DroppableFeaturedContainer id="featured" apps={featuredApps} />
-                <div className="flex justify-center items-center gap-1.5 mt-3">
-                    <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                    <div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
-                    <div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
-                </div>
+                {featuredApps.length > 1 && (
+                  <div className="flex justify-center items-center gap-1.5 mt-3">
+                    {featuredApps.map((_, index) => (
+                      <div
+                        key={index}
+                        className={cn(
+                          "rounded-full transition-all",
+                          // For now, we'll just highlight the first dot.
+                          // A more complex implementation would track scroll position.
+                          index === 0
+                            ? "w-2 h-2 bg-blue-500"
+                            : "w-1.5 h-1.5 bg-gray-300"
+                        )}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div>
