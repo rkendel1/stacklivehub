@@ -4,13 +4,13 @@ import * as React from "react";
 import { Search, User } from "lucide-react";
 import { NAV_ITEMS, MiniApp, Collection } from "@/lib/data";
 import { cn } from "@/lib/utils";
-import { UserProfileView } from "./user-profile-view";
 import { type CarouselApi } from "@/components/ui/carousel";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { FeaturedAppCard } from "./featured-app-card";
 import { AppGridCard } from "./app-grid-card";
 import { TrendingAppCard } from "./trending-app-card";
 import { CollectionPreviewCard } from "./collection-preview-card";
+import { MyAppsView } from "./my-apps-view";
 
 interface PhoneMockupProps {
   featuredApps: MiniApp[];
@@ -155,7 +155,7 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
             </div>
           )}
           {activeView === 'my-apps' && (
-            <UserProfileView myAppsCount={myApps.length} />
+            <MyAppsView myApps={myApps} />
           )}
         </main>
 
