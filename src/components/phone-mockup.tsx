@@ -183,12 +183,6 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
                 ))}
               </div>
             </footer>
-            
-            <div className="absolute bottom-24 right-6 z-20">
-              <button className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/40 transform transition-transform hover:scale-105 active:scale-95">
-                <Plus className="w-7 h-7" />
-              </button>
-            </div>
           </>
         )}
         <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 w-32 h-1.5 bg-gray-400 rounded-full"></div>
