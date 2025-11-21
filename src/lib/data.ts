@@ -1,4 +1,4 @@
-import { Aperture, Box, Gamepad2, Globe, MicVocal, Puzzle, ShoppingCart, Video, Palette, AlarmClock, Music, BookOpen, Home, List, BarChart2, Star as StarIcon, Dumbbell, Wallet, Zap, Heart, BrainCircuit, Lock, Smartphone } from "lucide-react";
+import { Aperture, Box, Gamepad2, Globe, MicVocal, Puzzle, ShoppingCart, Video, Palette, AlarmClock, Music, BookOpen, Home, List, BarChart2, Star as StarIcon, Dumbbell, Wallet, Zap, Heart, BrainCircuit, Lock, Smartphone, CloudSun, FileText, Calculator, Map, Camera, Mail, Calendar, Settings } from "lucide-react";
 
 export type MiniApp = {
   id: string;
@@ -86,6 +86,19 @@ const ALL_APPS: MiniApp[] = [
   { id: 'app-6', name: '3D Modeler', description: 'View 3D models.', icon: Box, rating: 4.1, reviews: '2K' },
   { id: 'app-7', name: 'Puzzle Game', description: 'A fun little puzzle.', icon: Puzzle, rating: 4.7, reviews: '18K' },
   { id: 'app-8', name: 'Browser', description: 'A mini web browser.', icon: Globe, rating: 4.4, reviews: '11K' },
+  { id: 'app-18', name: 'Weather Now', description: 'Check the weather forecast.', icon: CloudSun, rating: 4.5, reviews: '14K' },
+  { id: 'app-19', name: 'Quick Notes', description: 'Simple note-taking app.', icon: FileText, rating: 4.7, reviews: '22K' },
+  { id: 'app-20', name: 'Calculator Pro', description: 'A powerful calculator.', icon: Calculator, rating: 4.6, reviews: '19K' },
+  { id: 'app-21', name: 'City Maps', description: 'Navigate your city.', icon: Map, rating: 4.8, reviews: '28K' },
+  { id: 'app-22', name: 'Snap Camera', description: 'Capture beautiful moments.', icon: Camera, rating: 4.9, reviews: '35K' },
+  { id: 'app-23', name: 'Mail Client', description: 'Manage your emails easily.', icon: Mail, rating: 4.4, reviews: '16K' },
+  { id: 'app-24', name: 'Daily Planner', description: 'Organize your schedule.', icon: Calendar, rating: 4.7, reviews: '21K' },
+  { id: 'app-25', name: 'System Settings', description: 'Customize your device.', icon: Settings, rating: 4.3, reviews: '9K' },
+  { id: 'app-26', name: 'Stock Tracker', description: 'Follow the stock market.', icon: BarChart2, rating: 4.6, reviews: '17K' },
+  { id: 'app-27', name: 'Language Learner', description: 'Learn a new language.', icon: Globe, rating: 4.8, reviews: '24K' },
+  { id: 'app-28', name: 'Podcast Player', description: 'Listen to your favorite podcasts.', icon: MicVocal, rating: 4.5, reviews: '13K' },
+  { id: 'app-29', name: 'Fitness Pal', description: 'Your personal fitness coach.', icon: Dumbbell, rating: 4.9, reviews: '40K' },
+  { id: 'app-30', name: 'Mind Game', description: 'Train your brain.', icon: BrainCircuit, rating: 4.7, reviews: '18K' },
 ];
 
 export const FEATURED_APPS_INITIAL: MiniApp[] = [ALL_APPS.find(app => app.id === 'app-12')!];
