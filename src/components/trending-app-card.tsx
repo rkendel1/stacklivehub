@@ -1,7 +1,6 @@
 "use client";
 
 import { Star } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { MiniApp } from "@/lib/data";
 
@@ -27,15 +26,6 @@ export function TrendingAppCard({ app, rank, onClick }: TrendingAppCardProps) {
                 <span className="text-gray-400">{app.reviews}</span>
             </div>
         </div>
-        <Button
-          size="sm"
-          className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg h-8 text-sm font-semibold px-4"
-          onClick={(e) => {
-            if (onClick) e.stopPropagation();
-          }}
-        >
-          Open
-        </Button>
       </Card>
     </div>
   );

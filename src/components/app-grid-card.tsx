@@ -1,7 +1,6 @@
 "use client";
 
-import { Star, Zap } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Star } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { MiniApp } from "@/lib/data";
 import { cn } from "@/lib/utils";
@@ -24,16 +23,6 @@ export function AppGridCard({ app, onClick }: AppGridCardProps) {
           <span>{app.rating}</span>
           <span className="text-gray-400">{app.reviews}</span>
         </div>
-        <Button
-          size="sm"
-          className="w-full mt-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full h-9 text-base font-semibold"
-          onClick={(e) => {
-            if (onClick) e.stopPropagation();
-          }}
-        >
-          <Zap className="w-4 h-4 mr-1" />
-          Open
-        </Button>
       </Card>
     </div>
   );

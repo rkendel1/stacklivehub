@@ -1,7 +1,6 @@
 "use client";
 
-import { Star, Zap } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Star } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { MiniApp } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
@@ -25,16 +24,6 @@ export function MyAppCard({ app, onClick }: MyAppCardProps) {
           <span>{app.rating}</span>
           <span className="text-gray-400">{app.reviews}</span>
         </div>
-        <Button
-          size="lg"
-          className="w-full mt-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl h-10 text-base font-semibold"
-          onClick={(e) => {
-            if (onClick) e.stopPropagation();
-          }}
-        >
-          <Zap className="w-4 h-4 mr-2" />
-          Open
-        </Button>
       </Card>
     </div>
   );
