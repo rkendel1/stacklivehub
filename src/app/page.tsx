@@ -17,9 +17,7 @@ import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { AVAILABLE_APPS_INITIAL, FEATURED_APPS_INITIAL, NEW_THIS_WEEK_APPS_INITIAL, TRENDING_APPS_INITIAL, COLLECTIONS_INITIAL, MY_APPS_INITIAL, MiniApp, Collection } from "@/lib/data";
 import { PhoneMockup } from "@/components/phone-mockup";
 import { DroppableAppContainer } from "@/components/droppable-app-container";
-import { DroppableFeaturedContainer } from "@/components/droppable-featured-container";
 import { MiniAppCard } from "@/components/mini-app-card";
-import { FeaturedAppCard } from "@/components/featured-app-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { produce } from "immer";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -45,9 +43,8 @@ export default function CurationDashboard() {
     myApps: MY_APPS_INITIAL,
   });
   const [activeApp, setActiveApp] = React.useState<MiniApp | null>(null);
-  const [activeContainerId, setActiveContainerId] = React.useState<string | null>(null);
-  const [activeView, setActiveView] = React.useState('home');
   const [isClient, setIsClient] = React.useState(false);
+  const [activeView, setActiveView] = React.useState('home');
 
   React.useEffect(() => {
     setIsClient(true);
@@ -79,15 +76,6 @@ export default function CurationDashboard() {
     const { active } = event;
     const app = active.data.current?.app as MiniApp;
     setActiveApp(app);
-
-    const containerInfo = findContainerInfo(active.id);
-    if (containerInfo) {
-      if (containerInfo.type === 'list') {
-        setActiveContainerId(containerInfo.listId);
-      } else {
-        setActiveContainerId(containerInfo.collectionId);
-      }
-    }
   };
 
   const handleDragOver = (event: DragOverEvent) => {
@@ -140,7 +128,6 @@ export default function CurationDashboard() {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     setActiveApp(null);
-    setActiveContainerId(null);
     if (!over) return;
 
     const activeContainerInfo = findContainerInfo(active.id);
@@ -234,7 +221,7 @@ export default function CurationDashboard() {
                   <CardTitle>Featured Apps</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <DroppableFeaturedContainer id="featured" apps={appState.featured} />
+                  <DroppableAppContainer id="featured" apps={appState.featured} />
                 </CardContent>
               </Card>
 
@@ -251,13 +238,7 @@ export default function CurationDashboard() {
               </div>
               <DragOverlay>
                 {activeApp ? (
-                  activeContainerId === 'featured' ? (
-                    <div className="w-[280px]">
-                      <FeaturedAppCard app={activeApp} />
-                    </div>
-                  ) : (
-                    <MiniAppCard app={activeApp} isOverlay />
-                  )
+                  <MiniAppCard app={activeApp} isOverlay />
                 ) : null}
               </DragOverlay>
             </DndContext>
