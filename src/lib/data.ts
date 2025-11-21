@@ -1,24 +1,39 @@
-import { Aperture, Box, Gamepad2, Globe, Home, Layers, MicVocal, Puzzle, ShoppingCart, Video } from "lucide-react";
+import { Aperture, Box, Gamepad2, Globe, MicVocal, Puzzle, ShoppingCart, Video, Palette, AlarmClock, Music, BookOpen, Home, List, BarChart2, Star as StarIcon } from "lucide-react";
 
 export type MiniApp = {
   id: string;
   name: string;
   description: string;
   icon: React.ComponentType<any>;
+  rating?: number;
+  reviews?: string;
+  backgroundColor?: string;
 };
 
-export const AVAILABLE_APPS: MiniApp[] = [
-  { id: 'app-1', name: 'E-commerce Cart', description: 'A simple shopping cart experience.', icon: ShoppingCart },
-  { id: 'app-2', name: 'Game Pad', description: 'Interactive game controller.', icon: Gamepad2 },
-  { id: 'app-3', name: 'Video Player', description: 'A custom video player.', icon: Video },
-  { id: 'app-4', name: 'Music Maker', description: 'Create and share music.', icon: MicVocal },
-  { id: 'app-5', name: 'Photo Editor', description: 'Edit photos with filters.', icon: Aperture },
-  { id: 'app-6', name: '3D Modeler', description: 'View 3D models.', icon: Box },
-  { id: 'app-7', name: 'Puzzle Game', description: 'A fun little puzzle.', icon: Puzzle },
-  { id: 'app-8', name: 'Browser', description: 'A mini web browser.', icon: Globe },
+const ALL_APPS: MiniApp[] = [
+  { id: 'app-11', name: 'Pixel Art Studio', description: 'Create stunning pixel art', icon: Palette, rating: 4.8, reviews: '12K', backgroundColor: 'bg-gradient-to-br from-orange-400 to-red-500' },
+  { id: 'app-12', name: 'Focus Timer', description: 'Stay focused and productive', icon: AlarmClock, rating: 4.9, reviews: '25K' },
+  { id: 'app-13', name: 'Music Mixer', description: 'Create and share music', icon: Music, rating: 4.7, reviews: '8K' },
+  { id: 'app-14', name: 'Recipe Book', description: 'Find and save recipes', icon: BookOpen, rating: 4.6, reviews: '15K' },
+  { id: 'app-1', name: 'E-commerce Cart', description: 'A simple shopping cart experience.', icon: ShoppingCart, rating: 4.5, reviews: '10K' },
+  { id: 'app-2', name: 'Game Pad', description: 'Interactive game controller.', icon: Gamepad2, rating: 4.2, reviews: '5K' },
+  { id: 'app-3', name: 'Video Player', description: 'A custom video player.', icon: Video, rating: 4.6, reviews: '20K' },
+  { id: 'app-4', name: 'Music Maker', description: 'Create and share music.', icon: MicVocal, rating: 4.3, reviews: '7K' },
+  { id: 'app-5', name: 'Photo Editor', description: 'Edit photos with filters.', icon: Aperture, rating: 4.8, reviews: '30K' },
+  { id: 'app-6', name: '3D Modeler', description: 'View 3D models.', icon: Box, rating: 4.1, reviews: '2K' },
+  { id: 'app-7', name: 'Puzzle Game', description: 'A fun little puzzle.', icon: Puzzle, rating: 4.7, reviews: '18K' },
+  { id: 'app-8', name: 'Browser', description: 'A mini web browser.', icon: Globe, rating: 4.4, reviews: '11K' },
 ];
 
-export const CURATED_APPS: MiniApp[] = [
-    { id: 'app-9', name: 'Home Screen', description: 'The main home screen.', icon: Home },
-    { id: 'app-10', name: 'App Store', description: 'Discover new mini apps.', icon: Layers },
+export const FEATURED_APPS_INITIAL: MiniApp[] = [ALL_APPS[0]];
+export const NEW_THIS_WEEK_APPS_INITIAL: MiniApp[] = [ALL_APPS[1], ALL_APPS[2], ALL_APPS[3]];
+
+const curatedIds = new Set([...FEATURED_APPS_INITIAL, ...NEW_THIS_WEEK_APPS_INITIAL].map(app => app.id));
+export const AVAILABLE_APPS_INITIAL: MiniApp[] = ALL_APPS.filter(app => !curatedIds.has(app.id));
+
+export const NAV_ITEMS = [
+    { name: 'Home', icon: Home, active: true },
+    { name: 'Trending', icon: BarChart2, active: false },
+    { name: 'Lists', icon: List, active: false },
+    { name: 'My Apps', icon: StarIcon, active: false },
 ];
