@@ -14,7 +14,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { AVAILABLE_APPS_INITIAL, FEATURED_APPS_INITIAL, NEW_THIS_WEEK_APPS_INITIAL, MiniApp } from "@/lib/data";
+import { AVAILABLE_APPS_INITIAL, FEATURED_APPS_INITIAL, NEW_THIS_WEEK_APPS_INITIAL, TRENDING_APPS_INITIAL, MiniApp } from "@/lib/data";
 import { PhoneMockup } from "@/components/phone-mockup";
 import { DroppableAppContainer } from "@/components/droppable-app-container";
 import { MiniAppCard } from "@/components/mini-app-card";
@@ -24,6 +24,7 @@ type AppContainers = {
   available: MiniApp[];
   featured: MiniApp[];
   newThisWeek: MiniApp[];
+  trending: MiniApp[];
 };
 
 export default function CurationDashboard() {
@@ -31,8 +32,10 @@ export default function CurationDashboard() {
     available: AVAILABLE_APPS_INITIAL,
     featured: FEATURED_APPS_INITIAL,
     newThisWeek: NEW_THIS_WEEK_APPS_INITIAL,
+    trending: TRENDING_APPS_INITIAL,
   });
   const [activeApp, setActiveApp] = React.useState<MiniApp | null>(null);
+  const [activeView, setActiveView] = React.useState('home');
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -85,7 +88,10 @@ export default function CurationDashboard() {
       if (overContainer === 'featured') {
         if (overItems.length > 0) {
           const [swappedItem] = overItems.splice(0, 1, movedItem);
-          newApps.available.unshift(swappedItem);
+          const isAlreadyAvailable = newApps.available.some(app => app.id === swappedItem.id);
+          if (!isAlreadyAvailable) {
+            newApps.available.unshift(swappedItem);
+          }
         } else {
           overItems.push(movedItem);
         }
@@ -146,7 +152,13 @@ export default function CurationDashboard() {
                 </Card>
 
                 <div className="lg:col-span-2 flex items-center justify-center">
-                    <PhoneMockup featuredApps={apps.featured} newThisWeekApps={apps.newThisWeek} />
+                    <PhoneMockup 
+                        featuredApps={apps.featured} 
+                        newThisWeekApps={apps.newThisWeek}
+                        trendingApps={apps.trending}
+                        activeView={activeView}
+                        setActiveView={setActiveView}
+                    />
                 </div>
             </div>
         </div>
