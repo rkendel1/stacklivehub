@@ -132,6 +132,33 @@ export const COLLECTIONS_INITIAL: Collection[] = [
             ALL_APPS.find(app => app.name === 'Workout Buddy')!,
             ALL_APPS.find(app => app.name === 'Focus Timer')!,
         ]
+    },
+    {
+        id: 'collection-4',
+        name: 'For Gamers',
+        icon: Gamepad2,
+        apps: [
+            ALL_APPS.find(app => app.name === 'Game Pad')!,
+            ALL_APPS.find(app => app.name === 'Puzzle Game')!,
+        ]
+    },
+    {
+        id: 'collection-5',
+        name: 'Shopping Essentials',
+        icon: ShoppingCart,
+        apps: [
+            ALL_APPS.find(app => app.name === 'E-commerce Cart')!,
+            ALL_APPS.find(app => app.name === 'Budget Tracker')!,
+        ]
+    },
+    {
+        id: 'collection-6',
+        name: 'Entertainment',
+        icon: Video,
+        apps: [
+            ALL_APPS.find(app => app.name === 'Video Player')!,
+            ALL_APPS.find(app => app.name === 'Music Maker')!,
+        ]
     }
 ];
 
@@ -139,6 +166,10 @@ export const MY_APPS_INITIAL: MiniApp[] = [
     ALL_APPS.find(app => app.name === 'Pixel Art Studio')!,
     ALL_APPS.find(app => app.name === 'Focus Timer')!,
     ALL_APPS.find(app => app.name === 'Meditation')!,
+    ALL_APPS.find(app => app.name === 'Recipe Book')!,
+    ALL_APPS.find(app => app.name === 'Workout Buddy')!,
+    ALL_APPS.find(app => app.name === 'Budget Tracker')!,
+    ALL_APPS.find(app => app.name === 'E-commerce Cart')!,
 ];
 
 const curatedIds = new Set([
