@@ -7,7 +7,7 @@ import { DroppableAppGrid } from "./droppable-app-grid";
 import { cn } from "@/lib/utils";
 import { DroppableTrendingContainer } from "./droppable-trending-container";
 import { DroppableCollectionContainer } from "./droppable-collection-container";
-import { DroppableMyAppsContainer } from "./droppable-my-apps-container";
+import { UserProfileView } from "./user-profile-view";
 
 interface PhoneMockupProps {
   featuredApps: MiniApp[];
@@ -82,12 +82,7 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
             </div>
           )}
           {activeView === 'my-apps' && (
-            <div>
-                <div className="flex justify-between items-center mb-2">
-                    <h2 className="font-bold text-lg text-gray-800">My Apps</h2>
-                </div>
-                <DroppableMyAppsContainer id="myApps" apps={myApps} />
-            </div>
+            <UserProfileView myAppsCount={myApps.length} />
           )}
         </main>
 

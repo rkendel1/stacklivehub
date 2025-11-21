@@ -20,6 +20,7 @@ import { DroppableAppContainer } from "@/components/droppable-app-container";
 import { MiniAppCard } from "@/components/mini-app-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { produce } from "immer";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type AppState = {
   available: MiniApp[];
@@ -43,6 +44,11 @@ export default function CurationDashboard() {
   });
   const [activeApp, setActiveApp] = React.useState<MiniApp | null>(null);
   const [activeView, setActiveView] = React.useState('home');
+  const [isClient, setIsClient] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -157,46 +163,67 @@ export default function CurationDashboard() {
   };
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCorners}
-      onDragStart={handleDragStart}
-      onDragOver={handleDragOver}
-      onDragEnd={handleDragEnd}
-    >
-      <div className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 bg-gray-50 dark:bg-gray-900">
-        <div className="w-full max-w-6xl mx-auto">
-            <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold tracking-tight">Mini App Store Curator</h1>
-                <p className="text-muted-foreground">Drag and drop apps to arrange the store layout.</p>
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-                <Card className="lg:col-span-1">
-                    <CardHeader>
-                        <CardTitle>Available Apps</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <DroppableAppContainer id="available" apps={appState.available} />
-                    </CardContent>
-                </Card>
+    <div className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 bg-gray-50 dark:bg-gray-900">
+      <div className="w-full max-w-6xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold tracking-tight">Mini App Store Curator</h1>
+          <p className="text-muted-foreground">Drag and drop apps to arrange the store layout.</p>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+          {!isClient ? (
+            <>
+              <Card className="lg:col-span-1">
+                <CardHeader>
+                  <CardTitle>Available Apps</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <Skeleton className="h-[76px] w-full rounded-lg" />
+                    <Skeleton className="h-[76px] w-full rounded-lg" />
+                    <Skeleton className="h-[76px] w-full rounded-lg" />
+                    <Skeleton className="h-[76px] w-full rounded-lg" />
+                  </div>
+                </CardContent>
+              </Card>
+              <div className="lg:col-span-2 flex items-center justify-center">
+                <Skeleton className="h-[700px] w-[340px] rounded-[2.5rem]" />
+              </div>
+            </>
+          ) : (
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCorners}
+              onDragStart={handleDragStart}
+              onDragOver={handleDragOver}
+              onDragEnd={handleDragEnd}
+            >
+              <Card className="lg:col-span-1">
+                <CardHeader>
+                  <CardTitle>Available Apps</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <DroppableAppContainer id="available" apps={appState.available} />
+                </CardContent>
+              </Card>
 
-                <div className="lg:col-span-2 flex items-center justify-center">
-                    <PhoneMockup 
-                        featuredApps={appState.featured} 
-                        newThisWeekApps={appState.newThisWeek}
-                        trendingApps={appState.trending}
-                        collections={appState.collections}
-                        myApps={appState.myApps}
-                        activeView={activeView}
-                        setActiveView={setActiveView}
-                    />
-                </div>
-            </div>
+              <div className="lg:col-span-2 flex items-center justify-center">
+                <PhoneMockup
+                  featuredApps={appState.featured}
+                  newThisWeekApps={appState.newThisWeek}
+                  trendingApps={appState.trending}
+                  collections={appState.collections}
+                  myApps={appState.myApps}
+                  activeView={activeView}
+                  setActiveView={setActiveView}
+                />
+              </div>
+              <DragOverlay>
+                {activeApp ? <MiniAppCard app={activeApp} isOverlay /> : null}
+              </DragOverlay>
+            </DndContext>
+          )}
         </div>
       </div>
-      <DragOverlay>
-        {activeApp ? <MiniAppCard app={activeApp} isOverlay /> : null}
-      </DragOverlay>
-    </DndContext>
+    </div>
   );
 }
