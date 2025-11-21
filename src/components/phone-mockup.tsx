@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Search, User } from "lucide-react";
+import { Plus, Search, User } from "lucide-react";
 import { NAV_ITEMS, MiniApp, Collection } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { type CarouselApi } from "@/components/ui/carousel";
@@ -77,7 +77,7 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
               </div>
             </header>
 
-            <main className="flex-1 overflow-y-auto px-4 space-y-6 pt-4 pb-20">
+            <main className="flex-1 overflow-y-auto px-4 space-y-6 pt-4 pb-28">
               {activeView === 'home' && (
                 <>
                   <div>
@@ -163,16 +163,27 @@ export function PhoneMockup({ featuredApps, newThisWeekApps, trendingApps, colle
               )}
             </main>
 
-            <footer className="absolute bottom-0 left-0 right-0 flex justify-around items-center p-2 pb-4 border-t bg-white/70 backdrop-blur-sm rounded-b-[1.8rem] z-10">
-              {NAV_ITEMS.map((item) => (
-                <button key={item.id} onClick={() => setActiveView(item.id)} className="flex flex-col items-center gap-1 flex-1">
-                  <item.icon className={cn("w-6 h-6", activeView === item.id ? "text-blue-500" : "text-gray-400")} />
-                  <span className={cn("text-xs", activeView === item.id ? "text-blue-500 font-semibold" : "text-gray-500")}>{item.name}</span>
-                </button>
-              ))}
+            <footer className="absolute bottom-0 left-0 right-0 pt-4 pb-5 bg-white/60 backdrop-blur-xl z-10">
+              <div className="flex justify-around items-center">
+                {NAV_ITEMS.map((item) => (
+                  <button key={item.id} onClick={() => setActiveView(item.id)} className="relative flex flex-col items-center justify-center h-12 w-16 group">
+                    <item.icon className={cn("w-7 h-7 transition-colors", activeView === item.id ? "text-gray-900" : "text-gray-400 group-hover:text-gray-600")} />
+                    {activeView === item.id && (
+                      <div className="absolute bottom-1.5 w-1.5 h-1.5 bg-gray-900 rounded-full"></div>
+                    )}
+                  </button>
+                ))}
+              </div>
             </footer>
+            
+            <div className="absolute bottom-24 right-6 z-20">
+              <button className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/40 transform transition-transform hover:scale-105 active:scale-95">
+                <Plus className="w-7 h-7" />
+              </button>
+            </div>
           </>
         )}
+        <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 w-32 h-1.5 bg-gray-400 rounded-full"></div>
       </div>
     </div>
   );
